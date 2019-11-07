@@ -47,14 +47,14 @@ public class AutoMode extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
     private Magura robot;
-    private int MOTOR_TICK_COUNT = 1440;
+    private int MOTOR_TICK_COUNT = 1120;
+    private double circumference = 3.14 * 101.6;
     public void walk(int distance) {
         robot.motors.left_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.left_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double circumference = 3.14 * 25.4;
         double nrRot = distance / circumference;
         int target = (int)nrRot * MOTOR_TICK_COUNT;
 
@@ -88,7 +88,6 @@ public class AutoMode extends LinearOpMode {
         robot.motors.right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double circumference = 3.14 * 2.938;
         double raport = 360 / angle;
         int  target = (int) circumference / (int)raport;
 
