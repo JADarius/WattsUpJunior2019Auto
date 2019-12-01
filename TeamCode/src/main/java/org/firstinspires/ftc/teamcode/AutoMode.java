@@ -48,15 +48,14 @@ public class AutoMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private Magura robot;
     private int MOTOR_TICK_COUNT = 1120;
-    private double circumference = 3.14 * 101.6;
+    private double circumference = Math.PI * 101.6;
     public void walk(int distance) {
         robot.motors.left_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.left_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double nrRot = distance / circumference;
-        int target = (int)nrRot * MOTOR_TICK_COUNT;
+        int target =(int) (distance * MOTOR_TICK_COUNT / circumference);
 
         robot.motors.left_front.setTargetPosition(target);
         robot.motors.left_back.setTargetPosition(target);
@@ -66,7 +65,7 @@ public class AutoMode extends LinearOpMode {
         robot.motors.left_front.setPower(1);
         robot.motors.left_back.setPower(1);
         robot.motors.right_front.setPower(1);
-        robot.motors.left_front.setPower(1);
+        robot.motors.right_back.setPower(1);
 
         robot.motors.left_back.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motors.left_front.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -80,7 +79,7 @@ public class AutoMode extends LinearOpMode {
         robot.motors.left_front.setPower(0);
         robot.motors.left_back.setPower(0);
         robot.motors.right_front.setPower(0);
-        robot.motors.left_front.setPower(0);
+        robot.motors.right_back.setPower(0);
     }
     public void turn(int angle){
         robot.motors.left_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -88,8 +87,7 @@ public class AutoMode extends LinearOpMode {
         robot.motors.right_front.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.motors.right_back.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        double raport = 360 / angle;
-        int  target = (int) circumference / (int)raport;
+        int  target = (int) (angle * circumference / 360);
 
         robot.motors.left_front.setTargetPosition(target);
         robot.motors.left_back.setTargetPosition(target);
@@ -99,7 +97,7 @@ public class AutoMode extends LinearOpMode {
         robot.motors.left_front.setPower(1);
         robot.motors.left_back.setPower(1);
         robot.motors.right_front.setPower(1);
-        robot.motors.left_front.setPower(1);
+        robot.motors.right_back.setPower(1);
 
         robot.motors.left_back.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.motors.left_front.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -114,7 +112,7 @@ public class AutoMode extends LinearOpMode {
         robot.motors.left_front.setPower(0);
         robot.motors.left_back.setPower(0);
         robot.motors.right_front.setPower(0);
-        robot.motors.left_front.setPower(0);
+        robot.motors.right_back.setPower(0);
     }
     @Override
     public void runOpMode() {

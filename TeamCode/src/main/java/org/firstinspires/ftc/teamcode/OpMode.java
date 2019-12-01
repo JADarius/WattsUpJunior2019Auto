@@ -27,131 +27,78 @@
         * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         */
 
-        package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Hardware.Magura;
 
+@TeleOp
 
-@TeleOp(name="TeleOp", group="Linear Opmode")
-//@Disabled
 public class OpMode extends LinearOpMode {
-
-    public double scalePower(final double drivePower) {
-
-        return Math.pow(drivePower, 3);
-    }
-
-    private ElapsedTime runtime = new ElapsedTime();
-
     private Magura robot;
-
-    private boolean x_press = false;
-    private boolean a_press = false;
-    private boolean y_press = false;
-    private boolean b_press = false;
-    private double rotPower = 0.0;
-
-    private double modifier = 1.0;
-    private double driveSpeed = 1.0;
-
-    private int Turn = 112;
-
     @Override
-    public void runOpMode() {
+    public void runOpMode(){
+        boolean x_press = false;
+        boolean b_press = false;
+        telemetry.addData("Status","Initialized");
+        telemetry.update();
 
-        robot = new Magura(hardwareMap);
-
-        while (!opModeIsActive() && !isStopRequested()) {
-            telemetry.addData("Status", "Waiting in init");
-            telemetry.update();
-        }
-        runtime.reset();
+        robot.collector.rotLeft.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
-        // run until the end of the match (driver presses STOP)
-
-        while (opModeIsActive()) {
-
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
+        double circumferenceBig = Math.PI * 101.6;
+        double circumferenceSmall = Math.PI * 57.15;
+        int Turn = (int)(circumferenceSmall * 2 / 1120);
+        double drive = 0.0; //puterea fata-spate
+        double turn = 0.0; //puterea stanga-dreapta
+        double Speed = 0.0;
+        while(opModeIsActive()) {
+            telemetry.addData("Status", "Running");
             telemetry.update();
-            
-            double drive = gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
-
-            if (gamepad1.a) {
-                if (!a_press && modifier > 0.0)
-                    modifier *= -1.0;
-                a_press = true;
-            } else
-                a_press = false;
-
-            if (gamepad1.y) {
-                if (!y_press && modifier < 0.0)
-                    modifier = Math.abs(modifier);
-                y_press = true;
-            } else
-                y_press = false;
-
-            drive *= modifier;
-
-            if(gamepad1.right_trigger>0.3)
-                driveSpeed=0.5;
+            drive = -gamepad1.left_stick_y;
+            turn = gamepad1.right_stick_x;
+            if(gamepad1.right_trigger > 0.0)
+                Speed = 0.5;
             else
-                driveSpeed=1.0;
-
-            robot.motors.move(drive,turn,driveSpeed);
-
-            if(robot.sensors.rotTouch.isPressed())
-               robot.collector.stopRotation();
-
-            if (gamepad1.x){
-
-              if(!x_press){
-                robot.collector.stopRotation();
-                if(rotPower==0.0)
+                Speed = 1;
+            robot.motors.move(drive,turn,Speed);
+            double entrancePower = 0.0;
+            if(gamepad1.x) {
+                if(!x_press)
                 {
-                  rotPower=0.35;
-                  robot.collector.addPower(rotPower);
+                    robot.collector.stopRotation();
+                    if(entrancePower==0.0)
+                    {
+                        entrancePower=1;
+                        robot.collector.addPower(entrancePower);
+                    }
+                    else
+                    {
+                        entrancePower=0;
+                        robot.collector.addPower(entrancePower);
+                    }
+                    x_press = true;
                 }
-                else {
-                    rotPower=0.0;
-                    robot.collector.addPower(rotPower);
-                }
-                x_press=true;
-              }
-
+                else
+                    x_press = false;
             }
-            else
-                x_press=false;
-
-             if (gamepad1.b)
-             {
+            if(gamepad1.b) {
                 if(!b_press)
                 {
-                  robot.collector.stopRotation();
-                  robot.collector.addTicksWithPower(Turn,0.3);
-                  b_press = true;
+                    robot.collector.stopRotation();
+                    robot.collector.addTicksWithPower(Turn,1);
+                    b_press = true;
                 }
-
-             }
-             else
-                 b_press=false;
-
-            if(!robot.collector.rotRight.isBusy())
+                else
+                    b_press = false;
+            }
+            if(!robot.collector.rotLeft.isBusy())
                 robot.collector.stopRotation();
-
-
         }
     }
 }
