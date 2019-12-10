@@ -41,6 +41,9 @@ import org.firstinspires.ftc.teamcode.Hardware.Magura;
 
 public class OpMode extends LinearOpMode {
     private Magura robot;
+    public double scalePower(final double drivePower) {
+        return Math.pow(drivePower, 3);
+    }
     @Override
     public void runOpMode(){
         boolean x_press = false;
@@ -51,22 +54,34 @@ public class OpMode extends LinearOpMode {
         robot.collector.rotLeft.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
-        double circumferenceBig = Math.PI * 101.6;
         double circumferenceSmall = Math.PI * 57.15;
         int Turn = (int)(circumferenceSmall * 2 / 1120);
         double drive = 0.0; //puterea fata-spate
         double turn = 0.0; //puterea stanga-dreapta
+        double strafe = 0.0;
         double Speed = 0.0;
+        double powerLf = 0.0;
+        double powerRf = 0.0;
+        double powerLb = 0.0;
+        double powerRb = 0.0;
         while(opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
             drive = -gamepad1.left_stick_y;
+            strafe = gamepad1.left_stick_x;
             turn = gamepad1.right_stick_x;
             if(gamepad1.right_trigger > 0.0)
                 Speed = 0.5;
             else
                 Speed = 1;
-            robot.motors.move(drive,turn,Speed);
+            powerLf = Range.clip(drive + strafe + turn ,-1.0,1.0);
+            powerRf = Range.clip(drive - strafe - turn ,-1.0,1.0);
+            powerLb = Range.clip(drive - strafe + turn ,-1.0,1.0);
+            powerRb = Range.clip(drive + strafe - turn ,-1.0,1.0);
+            robot.motors.left_front.setPower(scalePower(powerLf * Speed));
+            robot.motors.right_front.setPower(scalePower(powerRf * Speed));
+            robot.motors.left_back.setPower(scalePower(powerLb * Speed));
+            robot.motors.right_back.setPower(scalePower(powerRb * Speed));
             double entrancePower = 0.0;
             if(gamepad1.x) {
                 if(!x_press)
