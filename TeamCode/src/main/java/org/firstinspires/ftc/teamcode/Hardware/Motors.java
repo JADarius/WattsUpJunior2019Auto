@@ -16,7 +16,6 @@ public class Motors {
         return Math.pow(drivePower, 3);
     }
 
-
     public Motors (DcMotor lb, DcMotor lf, DcMotor rb, DcMotor rf){
 
       left_front= lf;
@@ -35,19 +34,18 @@ public class Motors {
 
     }
 
-    public void move (double drive, double turn, double speed ){
+    public void move (double angle, double turn, double mag){
 
-        double leftPower = Range.clip(drive + turn, -1.0, 1.0);
-        double rightPower = Range.clip(drive - turn, -1.0, 1.0);
-
-        right_front.setPower(scalePower(rightPower * speed));
-        right_back.setPower(scalePower(rightPower * speed));
-
-        left_front.setPower(scalePower(leftPower * speed));
-        left_back.setPower(scalePower(leftPower * speed));
+        double pow1 = Math.sin(angle + Math.PI/4) * mag;
+        double pow2 = Math.sin(angle - Math.PI/4) * mag;
+        pow1 = Range.clip(pow1 + turn, -1.0, 1.0);
+        pow2 = Range.clip(pow2 + turn, -1.0, 1.0);
+        left_front.setPower(scalePower(pow1));
+        right_front.setPower(scalePower(pow2));
+        left_back.setPower(scalePower(pow2));
+        right_back.setPower(scalePower(pow1));
 
     }
-
 
 
 
