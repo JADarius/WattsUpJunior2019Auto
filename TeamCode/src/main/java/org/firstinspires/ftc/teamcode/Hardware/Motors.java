@@ -10,6 +10,8 @@ public class Motors {
 
     public DcMotor left_front , right_front ;
     public DcMotor left_back , right_back ;
+    public double pow1 = 0.0;
+    public double pow2 = 0.0;
 
     public double scalePower(final double drivePower) {
 
@@ -36,18 +38,24 @@ public class Motors {
 
     public void move (double angle, double turn, double mag){
 
-        double pow1 = Math.sin(angle + Math.PI/4) * mag;
-        double pow2 = Math.sin(angle - Math.PI/4) * mag;
-        pow1 = Range.clip(pow1 + turn, -1.0, 1.0);
-        pow2 = Range.clip(pow2 + turn, -1.0, 1.0);
+        pow1 = Math.sin(angle + Math.PI/4) * mag;
+        pow2 = Math.sin(angle - Math.PI/4) * mag;
+        normalize();
         left_front.setPower(scalePower(pow1));
         right_front.setPower(scalePower(pow2));
         left_back.setPower(scalePower(pow2));
         right_back.setPower(scalePower(pow1));
 
     }
-
-
-
-
+    public void normalize (){
+        /*daca una dintre valori este mai mare decat 1
+        voi imparti toate valorile cu cea care are cel mai mare modul
+        */
+        double max1 = 0.0;
+        max1 = Math.max(Math.abs(pow1), Math.abs(pow2));
+        if(max1>1) {
+            pow1 /= max1;
+            pow2 /= max1;
+        }
+    }
 }
