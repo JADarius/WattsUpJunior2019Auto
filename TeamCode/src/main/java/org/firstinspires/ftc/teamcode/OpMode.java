@@ -70,21 +70,14 @@ public class OpMode extends LinearOpMode {
             if(gamepad1.x) {
                 if(!x_press)
                 {
-                    robot.collector.stopRotation();
-                    if(entrancePower==0.0)
-                    {
-                        entrancePower=1;
-                        robot.collector.addPower(entrancePower);
-                    }
-                    else
-                    {
-                        entrancePower=0;
-                        robot.collector.addPower(entrancePower);
-                    }
+                    robot.servos.Apuca();
                     x_press = true;
                 }
                 else
+                {
+                    robot.servos.Desprinde();
                     x_press = false;
+                }
             }
             if(gamepad1.b) {
                 if(!b_press)

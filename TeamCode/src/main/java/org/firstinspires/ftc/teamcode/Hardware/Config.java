@@ -12,4 +12,7 @@ public class Config {
     public static final String rotLeft = "rl";
 
     public static final String rotTouch = "se1";
+
+    public static final String servo_1 = "s1";
+    public static final String servo_2 = "s2";
 }

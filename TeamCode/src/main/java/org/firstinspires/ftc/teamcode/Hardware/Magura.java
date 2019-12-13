@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode.Hardware;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsTouchSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Magura {
 
     public Motors motors;
     public Sensors sensors;
     public Collector collector;
+    public Servos servos;
 
     public HardwareMap hardwareMap;
 
@@ -31,7 +33,10 @@ public class Magura {
     sensors = new Sensors(
        hm.get(ModernRoboticsTouchSensor.class, Config.rotTouch)
         );
+    servos = new Servos(
+            hm.get(Servo.class, Config.servo_1),
+            hm.get(Servo.class, Config.servo_2)
+        );
     }
-
 
 }
