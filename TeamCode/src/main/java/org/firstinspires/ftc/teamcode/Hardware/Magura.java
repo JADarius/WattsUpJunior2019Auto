@@ -26,8 +26,8 @@ public class Magura {
         );
 
     collector= new Collector(
-       hm.get(DcMotor.class, Config.rotRight),
-       hm.get(DcMotor.class, Config.rotLeft)
+       hm.get(DcMotor.class, Config.brat),
+       hm.get(DcMotor.class, Config.mana)
         );
 
     sensors = new Sensors(

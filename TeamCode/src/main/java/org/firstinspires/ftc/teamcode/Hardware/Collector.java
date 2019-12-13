@@ -1,50 +1,28 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 public class Collector {
 
-    public DcMotor rotLeft , rotRight ;
+    public DcMotor brat , mana ;
 
    public Collector (DcMotor rr, DcMotor rl){
-      rotLeft=rl;
-      rotRight= rr;
+      brat=rl;
+      mana= rr;
 
-       rotRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       rotLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-   }
-
-   public void stopRotation (){
-     rotLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-     rotRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-     rotLeft.setPower(0.0);
-     rotRight.setPower(0.0);
+       brat.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+       mana.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
    }
 
-   public void addPower ( double power){
-     rotLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-     rotRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-     rotRight.setPower(-power);
-     rotLeft.setPower(power);
-
+   public void Prindere (double a, double b){
+       double power = Range.clip(a + b, -1.0, 1.0);
+       mana.setPower(power);
    }
 
-  public void addTicksWithPower (int ticks, double power){
-
-   rotLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-   rotRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-   rotRight.setTargetPosition(Math.abs(rotRight.getCurrentPosition()-ticks));
-   rotLeft.setTargetPosition(rotLeft.getCurrentPosition()-ticks);
-
-   rotRight.setPower(power);
-   rotLeft.setPower(power);
-
-  }
-
-
+   public void Catapult (double a){
+        double power = Range.clip(a, -1.0, 1.0);
+        brat.setPower(power);
+   }
 }

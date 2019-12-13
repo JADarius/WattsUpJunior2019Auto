@@ -41,9 +41,6 @@ import org.firstinspires.ftc.teamcode.Hardware.Magura;
 
 public class OpMode extends LinearOpMode {
     private Magura robot;
-    public double scalePower(final double drivePower) {
-        return Math.pow(drivePower, 3);
-    }
     @Override
     public void runOpMode(){
         boolean x_press = false;
@@ -51,22 +48,22 @@ public class OpMode extends LinearOpMode {
         telemetry.addData("Status","Initialized");
         telemetry.update();
 
-        robot.collector.rotLeft.setDirection(DcMotor.Direction.REVERSE);
-
         waitForStart();
-        double circumferenceSmall = Math.PI * 57.15;
-        int Turn = (int)(circumferenceSmall * 2 / 1120);
         double turn = 0.0;
         while(opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
+            double l2 = gamepad2.left_trigger;
+            double r2 = -gamepad2.right_trigger;
+            robot.collector.Prindere(l2, r2);
+            double pw = -gamepad2.left_stick_y;
+            robot.collector.Catapult(pw);
             double y = -gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double angle = Math.atan2(y,x);
             double mag = Math.sqrt(x * x + y * y);
             turn = gamepad1.right_stick_x;
             robot.motors.move(angle, mag, turn);
-            double entrancePower = 0.0;
             if(gamepad1.x) {
                 if(!x_press)
                 {

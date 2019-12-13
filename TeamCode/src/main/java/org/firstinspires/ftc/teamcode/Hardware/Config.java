@@ -8,8 +8,8 @@ public class Config {
     public static final String left_back = "bl";
     public static final String right_back = "br";
 
-    public static final String rotRight = "rr";
-    public static final String rotLeft = "rl";
+    public static final String brat = "rr";
+    public static final String mana = "rl";
 
     public static final String rotTouch = "se1";
 
