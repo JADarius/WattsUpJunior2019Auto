@@ -74,23 +74,17 @@ public class OpMode extends LinearOpMode {
                     x_press = true;
                 }
                 else
-                {
-                    robot.servos.Desprinde();
                     x_press = false;
-                }
             }
             if(gamepad1.b) {
                 if(!b_press)
                 {
-                    robot.collector.stopRotation();
-                    robot.collector.addTicksWithPower(Turn,1);
+                    robot.servos.Desprinde();
                     b_press = true;
                 }
                 else
                     b_press = false;
             }
-            if(!robot.collector.rotLeft.isBusy())
-                robot.collector.stopRotation();
         }
     }
 }

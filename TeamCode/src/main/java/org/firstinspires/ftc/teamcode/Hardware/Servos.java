@@ -15,7 +15,7 @@ public class Servos {
         servo_2.setPosition(1.0);
     }
     public void Desprinde (){
-        servo_1.setPosition(0.0);
-        servo_2.setPosition(0.0);
+        servo_1.setPosition(0.5);
+        servo_2.setPosition(0.5);
     }
 }
