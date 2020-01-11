@@ -116,6 +116,7 @@ public class AutoMode extends LinearOpMode {
     }
     @Override
     public void runOpMode() {
+        robot = new Magura(hardwareMap);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 

@@ -37,34 +37,35 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Hardware.Magura;
 
-@TeleOp
+@TeleOp(name="TeleOp", group="Linear Opmode")
 
 public class OpMode extends LinearOpMode {
     private Magura robot;
     @Override
     public void runOpMode(){
-        boolean x_press = false;
-        boolean b_press = false;
+        robot = new Magura(hardwareMap);
         telemetry.addData("Status","Initialized");
         telemetry.update();
-
+        double modifier = 1.0;
         waitForStart();
-        double turn = 0.0;
         while(opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
-            double l2 = gamepad2.left_trigger;
-            double r2 = -gamepad2.right_trigger;
-            robot.collector.Prindere(l2, r2);
-            double pw = -gamepad2.left_stick_y;
-            robot.collector.Catapult(pw);
-            double y = -gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x;
-            double angle = Math.atan2(y,x);
-            double mag = Math.sqrt(x * x + y * y);
-            turn = gamepad1.right_stick_x;
-            robot.motors.move(angle, mag, turn);
-            if(gamepad1.x) {
+            if(gamepad1.x)
+                robot.motors.setFace(-Math.PI / 2.0);
+            else if(gamepad1.b)
+                robot.motors.setFace(Math.PI / 2.0);
+            if(gamepad1.a)
+                robot.servos.Apuca();
+            else if(gamepad1.y)
+                robot.servos.Desprinde();
+            if(gamepad1.right_trigger > 0.3)
+                modifier = 0.5;
+            final double x = robot.motors.scalePower(gamepad1.left_stick_x);
+            final double y = robot.motors.scalePower(gamepad1.left_stick_y);
+            final double turn = robot.motors.scalePower(gamepad1.right_stick_x);
+            robot.motors.move(x, y, turn, modifier);
+            /*if(gamepad1.x) {
                 if(!x_press)
                 {
                     robot.servos.Apuca();
@@ -81,7 +82,7 @@ public class OpMode extends LinearOpMode {
                 }
                 else
                     b_press = false;
-            }
+            }*/
         }
     }
 }

@@ -10,12 +10,16 @@ public class Motors {
 
     public DcMotor left_front , right_front ;
     public DcMotor left_back , right_back ;
-    public double pow1 = 0.0;
-    public double pow2 = 0.0;
+    public final double masterAngle = Math.PI / 4.0;
+    public double face;
+    public double angle = 0.0;
+    public double mag = 0.0;
+    public double lf, lb, rf, rb;
+
 
     public double scalePower(final double drivePower) {
 
-        return Math.pow(drivePower, 3);
+       return Math.pow(drivePower, 3);
     }
 
     public Motors (DcMotor lb, DcMotor lf, DcMotor rb, DcMotor rf){
@@ -24,6 +28,8 @@ public class Motors {
       right_back= rb;
       right_front= rf;
       left_back= lb;
+
+      face = 0.0;
 
         right_front.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left_front.setZeroPowerBehavior((DcMotor.ZeroPowerBehavior.BRAKE));
@@ -36,26 +42,47 @@ public class Motors {
 
     }
 
-    public void move (double angle, double turn, double mag){
-
-        pow1 = Math.sin(angle + Math.PI/4) * mag;
-        pow2 = Math.sin(angle - Math.PI/4) * mag;
-        normalize();
-        left_front.setPower(scalePower(pow1));
-        right_front.setPower(scalePower(pow2));
-        left_back.setPower(scalePower(pow2));
-        right_back.setPower(scalePower(pow1));
-
+    public void setFace(double angle){
+        face = angle;
     }
-    public void normalize (){
-        /*daca una dintre valori este mai mare decat 1
-        voi imparti toate valorile cu cea care are cel mai mare modul
-        */
-        double max1 = 0.0;
-        max1 = Math.max(Math.abs(pow1), Math.abs(pow2));
-        if(max1>1) {
-            pow1 /= max1;
-            pow2 /= max1;
+
+    public void setPower(double modifier){
+        left_front.setPower(lf * modifier);
+        left_back.setPower(lb * modifier);
+        right_back.setPower(rb * modifier);
+        right_front.setPower(rf * modifier);
+    }
+
+    public void normalize(){
+        double maxi = Math.max(Math.max(Math.abs(lf), Math.abs(rb)), Math.max(Math.abs(lb), Math.abs(rf)));
+        if(maxi > 1.0)
+        {
+            lf /= maxi;
+            lb /= maxi;
+            rf /= maxi;
+            rb /= maxi;
         }
     }
+
+    public void drivePower(double turn){
+        lf = mag * Math.sin(-angle) - turn;
+        rf = mag * Math.cos(-angle) + turn;
+        lb = mag * Math.cos(-angle) - turn;
+        rb = mag * Math.sin(-angle) + turn;
+        normalize();
+    }
+
+    public void driveAngle(double x, double y){
+        angle = Math.atan2(x,y);
+        angle += masterAngle;
+        angle += face;
+        mag = Math.min(1.0, Math.sqrt(x * x + y * y));
+    }
+
+    public void move (double x, double y, double z, double r){
+        driveAngle(x ,y);
+        drivePower(z);
+        setPower(r);
+    }
+
 }
