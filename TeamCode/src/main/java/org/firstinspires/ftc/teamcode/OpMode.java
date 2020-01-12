@@ -31,9 +31,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Hardware.Magura;
 
@@ -47,18 +44,19 @@ public class OpMode extends LinearOpMode {
         telemetry.addData("Status","Initialized");
         telemetry.update();
         double modifier = 1.0;
+        robot.motors.setFace(Math.PI);
         waitForStart();
         while(opModeIsActive()) {
             telemetry.addData("Status", "Running");
             telemetry.update();
             if(gamepad1.x)
-                robot.motors.setFace(-Math.PI / 2.0);
-            else if(gamepad1.b)
-                robot.motors.setFace(Math.PI / 2.0);
-            if(gamepad1.a)
                 robot.servos.Apuca();
-            else if(gamepad1.y)
+            else if(gamepad1.b)
                 robot.servos.Desprinde();
+            if(gamepad1.a)
+                robot.motors.setFace(0);
+            else if(gamepad1.y)
+                robot.motors.setFace(Math.PI);
             if(gamepad1.right_trigger > 0.3)
                 modifier = 0.5;
             final double x = robot.motors.scalePower(gamepad1.left_stick_x);
