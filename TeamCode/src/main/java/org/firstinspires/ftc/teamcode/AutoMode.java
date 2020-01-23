@@ -46,7 +46,8 @@ import org.firstinspires.ftc.teamcode.Hardware.Magura;
 public class AutoMode extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-    private Magura robot;/*
+    private Magura robot;
+    /*
     private int MOTOR_TICK_COUNT = 1120;
     private double circumference = Math.PI * 100.0;
     public void walk(int distance) {
@@ -113,7 +114,8 @@ public class AutoMode extends LinearOpMode {
         robot.motors.left_back.setPower(0);
         robot.motors.right_front.setPower(0);
         robot.motors.right_back.setPower(0);
-    }*/
+    }
+    */
     @Override
     public void runOpMode() {
         robot = new Magura(hardwareMap);
@@ -123,11 +125,11 @@ public class AutoMode extends LinearOpMode {
         waitForStart();
         runtime.reset();
         robot.motors.reset();
-        robot.motors.driveLR(1.0,20);
-        robot.motors.driveFB(1.0,20);
+        robot.motors.driveLR(1.0,4200);
+        robot.motors.driveFB(1.0,600);
         robot.servos.Apuca();
-        robot.motors.driveFB(1.0,-20);
+        robot.motors.driveFB(1.0,-600);
         robot.servos.Desprinde();
-        robot.motors.driveLR(1.0,-20);
+        robot.motors.driveLR(1.0,-1200);
     }
 }
